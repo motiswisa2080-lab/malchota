@@ -1582,11 +1582,21 @@
       window.handleTefillinSetSelect = handleTefillinSetSelect;
       window.tefillinWizardState = tefillinWizardState;
       window.wizardState = wizardState;
+      window.filterCategory = function(category) {
+            const items = document.querySelectorAll('[data-category]');
+            items.forEach(item => {
+                if (!category || category === 'all' || item.dataset.category === category) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        };
     })();
   </script>
   <!-- כל שאר הקוד של הדף נמצא כאן -->
 <script type="module" src="bundle-modal-v6.js"></script>
 </body>
-</html>s
+</html>
    
 

@@ -1820,10 +1820,21 @@
       window.submitTefillinOrder = submitTefillinOrder;
       window.handleTefillinSetSelect = handleTefillinSetSelect;
       window.tefillinWizardState = tefillinWizardState;
-      window.wizardState = wizardState;
-    })();
-  </script><script type="module" src="bundle-modal-v6.js"></script>
-  
-</body>
+    window.wizardState = wizardState;
 
+        window.filterCategory = function(category) {
+            const items = document.querySelectorAll('[data-category]');
+            items.forEach(item => {
+                if (!category || category === 'all' || item.dataset.category === category) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        };
+    })();
+    </script>
+
+    <script src="bundle-modal-v6.js"></script>
+</body>
 </html>
