@@ -1,0 +1,1337 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>מלכותא סת"ם | קטלוג הסטים המהודרים</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Heebo:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+<script>
+/* ============================================================
+   מנגנון גיבוי לתמונות — מונע ריבועים שבורים במקרה של חוסר בתמונות פיזיות
+   ============================================================ */
+var PLACEHOLDER = 'data:image/svg+xml;utf8,' + encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 280">' +
+  '<rect width="400" height="280" fill="%23f1f5f9"/>' +
+  '<g fill="none" stroke="%23c59b27" stroke-width="2" stroke-linecap="round">' +
+  '<line x1="180" y1="150" x2="180" y2="128"/><line x1="200" y1="150" x2="200" y2="120"/>' +
+  '<line x1="220" y1="150" x2="220" y2="128"/></g>' +
+  '<circle cx="180" cy="122" r="4" fill="%23c59b27"/><circle cx="200" cy="114" r="4" fill="%23c59b27"/>' +
+  '<circle cx="220" cy="122" r="4" fill="%23c59b27"/>' +
+  '<text x="200" y="185" font-family="sans-serif" font-size="15" fill="%2394a3b8" text-anchor="middle">' +
+  'תמונה בהכנה</text></svg>'
+);
+
+window.imgFallback = function(img){
+  if(img) {
+    if(img.dataset.failed) return; // מונע לולאה אינסופית
+    img.dataset.failed = '1';
+    console.error('[מלכותא] ✗ תמונה לא נמצאה (404):', img.getAttribute('src'));
+    img.src = PLACEHOLDER;
+    img.classList.add('img-fallback');
+  }
+};
+</script>
+
+<style>
+:root {
+--brand-navy: #0f172a;
+--brand-gold: #c59b27;
+--brand-gold-light: #fef08a;
+--brand-bg: #fdfbf7;
+}
+
+body {
+font-family: 'Assistant', 'Heebo', sans-serif;
+background-color: var(--brand-bg);
+color: #1e293b;
+}
+
+.gold-border { border-color: var(--brand-gold); }
+.gold-text { color: var(--brand-gold); }
+.gold-bg { background-color: var(--brand-gold); }
+.navy-bg { background-color: var(--brand-navy); }
+
+.product-card {
+background: #ffffff;
+border-radius: 20px;
+overflow: hidden;
+box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+border: 1px solid #f1f5f9;
+transition: transform 0.3s ease, box-shadow 0.3s ease;
+display: flex;
+flex-direction: column;
+}
+
+.product-card:hover {
+transform: translateY(-5px);
+box-shadow: 0 20px 30px -10px rgba(197, 155, 39, 0.15);
+}
+
+.img-container {
+width: 100%;
+height: 280px;
+background-color: #f8fafc;
+display: flex;
+align-items: center;
+justify-content: center;
+overflow: hidden;
+}
+
+.img-container img {
+width: 100%;
+height: 100%;
+object-fit: cover;
+transition: transform 0.5s ease;
+}
+
+.product-card:hover .img-container img {
+transform: scale(1.04);
+}
+
+/* תמונה שנכשלה — לא לחתוך את הפלייסהולדר */
+.img-container img.img-fallback { object-fit: contain; }
+
+button.img-container {
+border: none;
+padding: 0;
+font: inherit;
+cursor: pointer;
+}
+
+/* ===== חלון המפרט (Modal) ===== */
+.modal-overlay {
+position: fixed; inset: 0; z-index: 2001;
+background: rgba(15, 23, 42, 0.72); backdrop-filter: blur(3px);
+display: none; align-items: center; justify-content: center; padding: 20px;
+overflow-y: auto; /* מאפשר גלילה של כל הבלוק אם הוא גבוה מדי במובייל */
+}
+
+.modal-overlay.open { display: flex; }
+
+.modal-content {
+background: #fff; border-radius: 20px; border-top: 4px solid var(--brand-gold);
+width: 100%; max-width: 520px; max-height: 88vh; overflow-y: auto;
+padding: 28px 24px 24px; position: relative;
+box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+animation: modalIn 0.25s ease;
+}
+
+@media (max-width: 640px) {
+  .modal-overlay {
+    align-items: flex-start; /* הצמדה לחלק העליון במובייל למניעת הסתרה ע"י המקלדת */
+    padding: 10px;
+  }
+  .modal-content {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    max-height: none; /* ביטול הגבלת הגובה של הקופסה כדי שהגלילה תהיה על האוברליי הראשי במובייל */
+  }
+}
+
+@keyframes modalIn {
+from { opacity: 0; transform: translateY(16px) scale(0.98); }
+to   { opacity: 1; transform: none; }
+}
+
+.close-btn {
+position: absolute; top: 10px; left: 14px; background: none; border: none;
+font-size: 2rem; line-height: 1; color: #94a3b8; cursor: pointer; padding: 2px 9px; border-radius: 8px;
+}
+
+.close-btn:hover { color: var(--brand-navy); background: #f1f5f9; }
+
+/* Animations */
+@keyframes fadeIn {
+from { opacity: 0; transform: translateY(8px); }
+to { opacity: 1; transform: none; }
+}
+.animate-fadeIn {
+animation: fadeIn 0.3s ease-out forwards;
+}
+</style>
+</head>
+
+<body class="antialiased min-h-screen flex flex-col">
+
+<!-- Header Navigation -->
+<header class="navy-bg text-white sticky top-0 z-50 shadow-md">
+  <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+    <a href="index.html" class="flex items-center gap-2">
+      <span class="text-2xl font-black tracking-wider gold-text">מלכותא סת"ם</span>
+    </a>
+    <nav class="hidden md:flex gap-6 font-semibold">
+      <a href="index.html" class="hover:text-amber-400 transition">דף הבית</a>
+      <a href="catalog.html" class="hover:text-amber-400 transition">קטלוג סטים</a>
+      <a href="allproducts.html" class="gold-text border-b-2 gold-border pb-1">כל המוצרים</a>
+      <a href="about.html" class="hover:text-amber-400 transition">אודות</a>
+    </nav>
+    <a id="waHeader" href="#" target="_blank" rel="noopener" class="gold-bg text-slate-900 font-bold px-4 py-2 rounded-full hover:bg-amber-300 transition text-sm">
+      ייעוץ אישי בוואטסאפ 📱
+    </a>
+  </div>
+</header>
+
+<!-- Banner -->
+<section class="navy-bg text-white py-12 px-4 text-center border-b-4 gold-border">
+  <div class="max-w-3xl mx-auto">
+    <h1 class="text-3xl md:text-5xl font-black mb-3 gold-text">קטלוג הסטים המהודרים של מלכותא</h1>
+    <p class="text-lg md:text-xl text-slate-300">קנייה ישירה מהסופר – כתיבה תמה, הידור הלכתי מושלם ועיצוב יוקרתי לבר מצווה ולכל החיים</p>
+  </div>
+</section>
+
+<!-- Main Catalog Grid -->
+<main class="max-w-7xl mx-auto px-4 py-12 flex-grow w-full">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+    <!-- המוצר: סט קו יהלום כחול -->
+    <div class="product-card">
+      <div class="relative">
+        <span class="absolute top-3 right-3 gold-bg text-slate-900 font-extrabold text-xs px-3 py-1 rounded-full z-10 shadow">קו יהלום VIP</span>
+        <div class="img-container">
+          <img src="images/set-yahalom-blue.jpg" alt="סט בר מצווה קו יהלום כחול-לבן" loading="lazy" onerror="imgFallback(this)">
+        </div>
+      </div>
+      <div class="p-6 flex flex-col flex-grow">
+        <h3 class="text-2xl font-bold mb-2 text-slate-900">סט בר מצווה – קו יהלום כחול-לבן</h3>
+        <p class="text-slate-600 text-sm mb-4 leading-relaxed flex-grow">
+          סט מהודר במיוחד הכולל תפילין בהמה גסה, טלית צמר טהור, נרתיקי קטיפה/זמש כחולים מעוצבים, סידור וכיפה תואמת.
+        </p>
+        <div class="flex justify-between items-center pt-2 border-t border-slate-100">
+          <span class="text-2xl font-black gold-text">₪2,699</span>
+          <button type="button" onclick="openTefillinModal(0)" class="bg-amber-500 text-slate-900 font-extrabold px-4 py-2 rounded-xl hover:bg-amber-400 transition text-sm shadow-md">
+            התאמה אישית והזמנה ←
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- המוצר: סט קו שהם כתר זהב -->
+    <div class="product-card">
+      <div class="relative">
+        <span class="absolute top-3 right-3 bg-amber-500 text-white font-extrabold text-xs px-3 py-1 rounded-full z-10 shadow">דגם כתר זהב</span>
+        <div class="img-container">
+          <img src="images/set-shoham-gold.jpg" alt="סט קו שהם דגם כתר זהב" loading="lazy" onerror="imgFallback(this)">
+        </div>
+      </div>
+      <div class="p-6 flex flex-col flex-grow">
+        <h3 class="text-2xl font-bold mb-2 text-slate-900">סט קו שהם – דגם ה' כתר זהב</h3>
+        <p class="text-slate-600 text-sm mb-4 leading-relaxed flex-grow">
+          ערכת תפילין מושלמת בגימור שמנת-זהב יוקרתי, כולל הטבעת האות ה' וברכת הכוהנים, סידור מהודר וכיפת זמש תואמת.
+        </p>
+        <div class="flex justify-between items-center pt-2 border-t border-slate-100">
+          <span class="text-2xl font-black gold-text">₪2,450</span>
+          <button type="button" onclick="openTefillinModal(1)" class="bg-amber-500 text-slate-900 font-extrabold px-4 py-2 rounded-xl hover:bg-amber-400 transition text-sm shadow-md">
+            התאמה אישית והזמנה ←
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- המוצר: סט קו שהם להבת אש -->
+    <div class="product-card">
+      <div class="relative">
+        <span class="absolute top-3 right-3 bg-red-800 text-white font-extrabold text-xs px-3 py-1 rounded-full z-10 shadow">דגם ירושלים / VIP</span>
+        <div class="img-container">
+          <img src="images/set-shoham-cream.jpg" alt="סט קו שהם דגם להבת אש" loading="lazy" onerror="imgFallback(this)">
+        </div>
+      </div>
+      <div class="p-6 flex flex-col flex-grow">
+        <h3 class="text-2xl font-bold mb-2 text-slate-900">סט קו שהם – דגם להבת אש</h3>
+        <p class="text-slate-600 text-sm mb-4 leading-relaxed flex-grow">
+          עיצוב ייחודי עם אלמנט להבת הקודש, נרתיקים בגוון שמנת-זמש עמיד, כיפה תואמת וסידור שירת הלב בעיטורי זהב.
+        </p>
+        <div class="flex justify-between items-center pt-2 border-t border-slate-100">
+          <span class="text-2xl font-black gold-text">₪2,390</span>
+          <button type="button" onclick="openTefillinModal(2)" class="bg-amber-500 text-slate-900 font-extrabold px-4 py-2 rounded-xl hover:bg-amber-400 transition text-sm shadow-md">
+            התאמה אישית והזמנה ←
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- המוצר: סט קו שהם חום כשרות -->
+    <div class="product-card">
+      <div class="relative">
+        <span class="absolute top-3 right-3 bg-amber-900 text-white font-extrabold text-xs px-3 py-1 rounded-full z-10 shadow">דגם כשרות זמש</span>
+        <div class="img-container">
+          <img src="images/set-shoham-brown.jpg" alt="סט קו שהם דגם זמש חום" loading="lazy" onerror="imgFallback(this)">
+        </div>
+      </div>
+      <div class="p-6 flex flex-col flex-grow">
+        <h3 class="text-2xl font-bold mb-2 text-slate-900">סט קו שהם – דגם זמש חום כהה</h3>
+        <p class="text-slate-600 text-sm mb-4 leading-relaxed flex-grow">
+          נרתיקי זמש חום עמוק בהטבעת זהב יוקרתית, כולל תפילין בהמה גסה, טלית איכותית וסידור מהודר בכריכת עור.
+        </p>
+        <div class="flex justify-between items-center pt-2 border-t border-slate-100">
+          <span class="text-2xl font-black gold-text">₪2,290</span>
+          <button type="button" onclick="openTefillinModal(3)" class="bg-amber-500 text-slate-900 font-extrabold px-4 py-2 rounded-xl hover:bg-amber-400 transition text-sm shadow-md">
+            התאמה אישית והזמנה ←
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- המוצר: נרתיקים בעיצוב אישי -->
+    <div class="product-card">
+      <div class="relative">
+        <span class="absolute top-3 right-3 bg-emerald-700 text-white font-extrabold text-xs px-3 py-1 rounded-full z-10 shadow">עיצוב אישי</span>
+        <div class="img-container">
+          <img src="images/pouch-custom-rabbi.jpg" alt="נרתיק זמש בעיצוב אישי דמות צדיק" loading="lazy" onerror="imgFallback(this)">
+        </div>
+      </div>
+      <div class="p-6 flex flex-col flex-grow">
+        <h3 class="text-2xl font-bold mb-2 text-slate-900">נרתיקי תפילין בעיצוב אישי</h3>
+        <p class="text-slate-600 text-sm mb-4 leading-relaxed flex-grow">
+          הטבעות והדפסים מיוחדים של דמויות צדיקים, שמות אישיים והקדשות לפי בקשה על גבי נרתיקי זמש וקטיפה איכותיים.
+        </p>
+        <div class="flex justify-between items-center pt-2 border-t border-slate-100">
+          <span class="text-2xl font-black gold-text">החל מ-₪450</span>
+          <a href="#" target="_blank" rel="noopener" data-wa="שלום, אשמח לקבל פרטים על נרתיקים בעיצוב אישי" class="navy-bg text-white font-bold px-4 py-2 rounded-xl hover:opacity-90 transition text-sm">
+            לעיצוב אישי ←
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- המוצר: קלף מזוזה — פותח את חלון המפרט -->
+    <div class="product-card">
+      <div class="relative">
+        <span class="absolute top-3 right-3 bg-slate-800 text-white font-extrabold text-xs px-3 py-1 rounded-full z-10 shadow">קלף כשר</span>
+        <button type="button" class="img-container" onclick="openMezuzahModal('scroll')" aria-label="פתיחת בחירת גודל ונוסח לקלף מזוזה">
+          <img src="images/scrol-12cm.webp" alt="קלף מזוזה מהודר בגודל 12 ס"מ" loading="lazy" onerror="imgFallback(this)">
+        </button>
+      </div>
+      <div class="p-6 flex flex-col flex-grow">
+        <h3 class="text-2xl font-bold mb-2 text-slate-900">קלף מזוזה מהודר</h3>
+        <p class="text-slate-600 text-sm mb-4 leading-relaxed flex-grow">
+          כתיבה תמה על קלף עבודת יד, בנוסח ספרדי או אשכנזי, בשני גדלים. נבדק לפני המסירה.
+        </p>
+        <div class="flex justify-between items-center pt-2 border-t border-slate-100">
+          <span class="text-2xl font-black gold-text">החל מ-₪250</span>
+          <button type="button" onclick="openMezuzahModal('scroll')" class="navy-bg text-white font-bold px-4 py-2 rounded-xl hover:opacity-90 transition text-sm">
+            בחירת גודל ונוסח ←
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- המוצר: בתי מזוזה — פותח את חלון המפרט -->
+    <div class="product-card">
+      <div class="relative">
+        <span class="absolute top-3 right-3 bg-slate-600 text-white font-extrabold text-xs px-3 py-1 rounded-full z-10 shadow">קולקציית בתים</span>
+        <button type="button" class="img-container" onclick="openMezuzahModal('case')" aria-label="פתיחת קולקציית בתי מזוזה">
+          <img src="images/case-black.webp" alt="בית מזוזה בטון שחור בעיצוב מודרני" loading="lazy" onerror="imgFallback(this)">
+        </button>
+      </div>
+      <div class="p-6 flex flex-col flex-grow">
+        <h3 class="text-2xl font-bold mb-2 text-slate-900">בתי מזוזה מעוצבים</h3>
+        <p class="text-slate-600 text-sm mb-4 leading-relaxed flex-grow">
+          בתים בעיצוב נקי ועמיד לכל דלת בבית — בטון, עץ ומתכת, בהתאמה לגודל הקלף שבחרתם.
+        </p>
+        <div class="flex justify-between items-center pt-2 border-t border-slate-100">
+          <span class="text-2xl font-black gold-text">החל מ-₪90</span>
+          <button type="button" onclick="openMezuzahModal('case')" class="navy-bg text-white font-bold px-4 py-2 rounded-xl hover:opacity-90 transition text-sm">
+            לצפייה בקולקציה ←
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- חלון מפרט נשלף (Modal) מזוזות -->
+<div id="mezuzahModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-content">
+    <button class="close-btn" onclick="closeMezuzahModal()" aria-label="סגירת החלון">&times;</button>
+    <div id="modalBody">
+      <!-- התוכן והתמונות נטענים כאן דינמית -->
+    </div>
+  </div>
+</div>
+
+<!-- חלון מפרט נשלף (Modal) תפילין -->
+<div id="tefillinModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="tefillinModalTitle">
+  <div class="modal-content">
+    <button class="close-btn" onclick="closeTefillinModal()" aria-label="סגירת החלון">&times;</button>
+    <div id="tefillinModalBody">
+      <!-- התוכן והתמונות נטענים כאן דינמית -->
+    </div>
+  </div>
+</div>
+
+<!-- כפתור WhatsApp צף -->
+<a id="waFloat" href="#" target="_blank" rel="noopener" class="whatsapp-float" title="דבר איתנו בוואטסאפ" aria-label="דבר איתנו בוואטסאפ">💬</a>
+
+<!-- Footer -->
+<footer class="navy-bg text-slate-400 py-8 px-4 text-center text-sm border-t border-slate-800">
+  <p class="font-bold text-slate-300 mb-1">בית היוצר "מלכותא" – תשמישי קדושה וסת"ם</p>
+  <p>© 2026 מלכותא סת"ם – בית יוצר לתפילין ומזוזות מהודרות. כל הזכויות שמורות.</p>
+</footer>
+
+<script>
+/* ============================================================
+   מלכותא - מנגנון מודאל Bundle אינטראקטיבי מעודכן (bundle-modal.js)
+   מתאים לשיבוץ ב-index.html וב-catalog.html
+   ============================================================ */
+
+var WA_NUMBER = '972535502797';
+var MAKE_WEBHOOK_URL = 'https://hook.eu1.make.com/bdzi3ak12pi5oc1miae86sspwfs1lecm';
+
+var IMAGES = {
+  scroll10: 'images/scrol-10cm.webp',
+  scroll12: 'images/scrol-12cm.webp',
+  caseBlack: 'images/case-black.webp',
+  caseStone: 'images/case-stone.webp',
+  caseWood: 'images/case-wood.webp'
+};
+
+var mezuzahData = {
+  scrolls: [
+    { 
+      size: '10 ס"מ', 
+      price: 250, 
+      img: IMAGES.scroll10,
+      scribe: {
+        name: 'יוחנן לבבי',
+        location: 'העיר העתיקה, ירושלים',
+        experience: '12 שנות כתיבה מהמהודרות',
+        certification: 'מוסמך ועד משמרת סת"ם'
+      }
+    },
+    { 
+      size: '12 ס"מ', 
+      price: 280, 
+      img: IMAGES.scroll12,
+      scribe: {
+        name: 'הרב דוד חסון',
+        location: 'חריש',
+        experience: '20 שנות ניסיון והוראת סת"ם',
+        certification: 'בית הוראה - מלאכת הקודש'
+      }
+    }
+  ],
+  cases: [
+    { name: 'בטון שחור MODERN', price: 90, img: IMAGES.caseBlack },
+    { name: 'שיש ירושלמי קלאסי', price: 120, img: IMAGES.caseStone || IMAGES.caseBlack },
+    { name: 'עץ זית טבעי חם', price: 150, img: IMAGES.caseWood || IMAGES.caseBlack }
+  ]
+};
+
+var wizardState = {
+  currentStep: 1,
+  selectedCaseIndex: 0,
+  includeScroll: true,
+  selectedScrollIndex: 1,
+  selectedNusach: 'ספרדי (עדות המזרח)',
+  clientName: '',
+  clientPhone: '',
+  clientAddress: ''
+};
+
+var NUSACH_OPTIONS = [
+  'ספרדי (עדות המזרח)',
+  'אשכנזי (ואליש / בית יוסף)'
+];
+
+var waLink = txt => `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(txt)}`;
+
+function openMezuzahModal(type) {
+  const modalEl = document.getElementById('mezuzahModal');
+  if (!modalEl) return;
+
+  wizardState = {
+    currentStep: 1,
+    selectedCaseIndex: 0,
+    includeScroll: type !== 'case',
+    selectedScrollIndex: 1,
+    selectedNusach: 'ספרדי (עדות המזרח)',
+    clientName: '',
+    clientPhone: '',
+    clientAddress: ''
+  };
+
+  renderWizard();
+  modalEl.style.display = 'flex';
+  modalEl.classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  const closeBtn = modalEl.querySelector('.close-btn');
+  if (closeBtn) closeBtn.focus();
+}
+
+function closeMezuzahModal() {
+  const modalEl = document.getElementById('mezuzahModal');
+  if (modalEl) {
+    modalEl.style.display = 'none';
+    modalEl.classList.remove('open');
+  }
+  document.body.style.overflow = '';
+}
+
+function nextStep() {
+  if (wizardState.currentStep === 1) {
+    wizardState.currentStep = 2;
+  } else if (wizardState.currentStep === 2) {
+    if (!wizardState.includeScroll) {
+      wizardState.currentStep = 4;
+    } else {
+      wizardState.currentStep = 3;
+    }
+  } else if (wizardState.currentStep === 3) {
+    wizardState.currentStep = 4;
+  }
+  renderWizard();
+}
+
+function prevStep() {
+  if (wizardState.currentStep === 4 && !wizardState.includeScroll) {
+    wizardState.currentStep = 2;
+  } else {
+    wizardState.currentStep--;
+  }
+  renderWizard();
+}
+
+function calculatePrice() {
+  const selectedCase = mezuzahData.cases[wizardState.selectedCaseIndex];
+  let standardPrice = selectedCase.price;
+  let finalPrice = selectedCase.price;
+  let discount = 0;
+
+  if (wizardState.includeScroll) {
+    const selectedScroll = mezuzahData.scrolls[wizardState.selectedScrollIndex];
+    standardPrice += selectedScroll.price;
+    discount = 30;
+    finalPrice = standardPrice - discount;
+  }
+
+  return {
+    standardPrice,
+    finalPrice,
+    discount,
+    isBundle: wizardState.includeScroll
+  };
+}
+
+function handleCaseSelect(index) {
+  wizardState.selectedCaseIndex = index;
+  renderWizard();
+}
+
+function handleScrollToggle(include) {
+  wizardState.includeScroll = include;
+  renderWizard();
+}
+
+function handleScrollSizeChange(index) {
+  wizardState.selectedScrollIndex = index;
+  renderWizard();
+}
+
+function handleNusachChange(val) {
+  wizardState.selectedNusach = val;
+}
+
+function renderWizard() {
+  const body = document.getElementById('modalBody');
+  if (!body) return;
+
+  const pricing = calculatePrice();
+  let stepHTML = '';
+
+  const progressPercent = ((wizardState.currentStep - 1) / 3) * 100;
+  const progressBar = `
+    <div class="w-full bg-slate-100 h-2 rounded-full mb-6 overflow-hidden relative" style="direction: ltr;">
+      <div class="bg-amber-500 h-full transition-all duration-300 rounded-full" style="width: ${progressPercent}%; float: right;"></div>
+    </div>
+  `;
+
+  if (wizardState.currentStep === 1) {
+    const casesGrid = mezuzahData.cases.map((c, i) => {
+      const isSelected = wizardState.selectedCaseIndex === i;
+      const borderClass = isSelected ? 'border-amber-500 ring-2 ring-amber-500/20 bg-amber-50/10' : 'border-slate-200 hover:border-amber-300';
+      return `
+        <div onclick="handleCaseSelect(${i})" class="border-2 ${borderClass} p-3 rounded-xl cursor-pointer transition flex flex-col items-center text-center bg-white shadow-sm">
+          <img src="${c.img}" alt="${c.name}" class="w-full h-24 object-cover rounded-lg mb-2" onerror="imgFallback(this)">
+          <h5 class="font-bold text-slate-800 text-sm mb-1 leading-tight">${c.name}</h5>
+          <p class="font-black text-amber-600 text-sm">${c.price} ₪</p>
+        </div>
+      `;
+    }).join('');
+
+    stepHTML = `
+      ${progressBar}
+      <h3 class="text-xl font-bold text-slate-900 text-right mb-1">התאמת Bundle מהודר</h3>
+      <p class="text-sm text-slate-500 text-right mb-4">שלב 1 מתוך 4: בחירת בית מזוזה מעוצב</p>
+      
+      <div class="grid grid-cols-3 gap-3 mb-6">
+        ${casesGrid}
+      </div>
+
+      <div class="flex justify-end">
+        <button class="bg-slate-900 text-white font-bold px-6 py-3 rounded-xl hover:opacity-90 transition text-sm flex items-center gap-2" onclick="nextStep()">
+          המשך לשלב הבא ←
+        </button>
+      </div>
+    `;
+
+  } else if (wizardState.currentStep === 2) {
+    const isScrollYes = wizardState.includeScroll;
+    const yesBorder = isScrollYes ? 'border-amber-500 ring-2 ring-amber-500/20 bg-amber-50/5' : 'border-slate-200';
+    const noBorder = !isScrollYes ? 'border-amber-500 ring-2 ring-amber-500/20 bg-amber-50/5' : 'border-slate-200';
+    
+    const scrollOptions = mezuzahData.scrolls.map((s, i) => {
+      const isSelected = wizardState.selectedScrollIndex === i;
+      const borderClass = isSelected ? 'border-amber-500 bg-amber-50/20 text-amber-600' : 'border-slate-200 text-slate-700 hover:border-amber-200';
+      return `
+        <button onclick="handleScrollSizeChange(${i})" class="flex-1 border-2 ${borderClass} py-2 px-3 rounded-lg font-bold text-xs transition">
+          קלף ${s.size} (+${s.price} ₪)
+        </button>
+      `;
+    }).join('');
+
+    const nusachOptions = NUSACH_OPTIONS.map(n => {
+      const isSelected = wizardState.selectedNusach === n;
+      return `<option value="${n}" ${isSelected ? 'selected' : ''}>${n}</option>`;
+    }).join('');
+
+    stepHTML = `
+      ${progressBar}
+      <h3 class="text-xl font-bold text-slate-900 text-right mb-1">הוספת קלף סת"ם כשר</h3>
+      <p class="text-sm text-slate-500 text-right mb-4">שלב 2 מתוך 4: הגדרת המזוזה</p>
+
+      <div class="space-y-3 mb-6 text-right">
+        <div onclick="handleScrollToggle(true)" class="border-2 ${yesBorder} p-4 rounded-xl cursor-pointer transition bg-white relative">
+          <span class="absolute top-2 left-3 bg-amber-100 text-amber-700 font-extrabold text-[10px] px-2 py-0.5 rounded-full" style="left: auto; right: 12px; top: -10px;">משתלם ביותר! הטבת Bundle</span>
+          <div class="flex items-start gap-3 mt-1">
+            <input type="radio" name="scrollOpt" class="mt-1 accent-amber-500" ${isScrollYes ? 'checked' : ''}>
+            <div>
+              <h4 class="font-bold text-slate-800 text-base">כן, אשמח להוסיף קלף סת"ם מהודר</h4>
+              <p class="text-xs text-slate-500 mt-1 leading-relaxed">קלף כשר שנכתב על ידי סופר מוסמך, כולל הגהה כפולה (מחשב + מומחה) ותעודת אחריות. חוסך 30 ₪ במחיר החבילה!</p>
+            </div>
+          </div>
+        </div>
+
+        <div onclick="handleScrollToggle(false)" class="border-2 ${noBorder} p-4 rounded-xl cursor-pointer transition bg-white">
+          <div class="flex items-start gap-3">
+            <input type="radio" name="scrollOpt" class="mt-1 accent-amber-500" ${!isScrollYes ? 'checked' : ''}>
+            <div>
+              <h4 class="font-bold text-slate-800 text-base">לא, ברצוני לרכוש בית מזוזה בלבד</h4>
+              <p class="text-xs text-slate-500 mt-1 leading-relaxed">שימו לב: בית המזוזה יגיע ריק ללא קלף סת"ם כשר בפנים, ולא ניתן יהיה לקבוע אותו כך הלכתית בפתח הבית.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      ${isScrollYes ? `
+        <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 mb-6 text-right animate-fadeIn">
+          <h4 class="font-bold text-slate-700 text-sm mb-2">מאפייני קלף הסת"ם שלך:</h4>
+          <div class="flex gap-3 mb-4">
+            ${scrollOptions}
+          </div>
+          <h4 class="font-bold text-slate-700 text-sm mb-2">נוסח הלכתי:</h4>
+          <select id="scrollNusach" class="w-full p-2.5 border border-slate-200 rounded-lg text-sm bg-white" onchange="handleNusachChange(this.value)">
+            ${nusachOptions}
+          </select>
+        </div>
+      ` : ''}
+
+      <div class="flex justify-between items-center">
+        <button class="text-slate-500 font-bold px-4 py-2 hover:bg-slate-100 rounded-xl transition text-sm" onclick="prevStep()">
+          ← חזרה לבית המזוזה
+        </button>
+        <button class="bg-slate-900 text-white font-bold px-6 py-3 rounded-xl hover:opacity-90 transition text-sm flex items-center gap-2" onclick="nextStep()">
+          המשך לשלב הבא ←
+        </button>
+      </div>
+    `;
+
+  } else if (wizardState.currentStep === 3) {
+    const selectedScroll = mezuzahData.scrolls[wizardState.selectedScrollIndex];
+    const s = selectedScroll.scribe;
+
+    stepHTML = `
+      ${progressBar}
+      <h3 class="text-xl font-bold text-slate-900 text-right mb-1">הכירו את סופר הסת"ם שלכם</h3>
+      <p class="text-sm text-slate-500 text-right mb-4">שלב 3 מתוך 4: חיבור רגשי ואותנטיות</p>
+
+      <div class="bg-amber-50/40 border border-amber-100 p-5 rounded-2xl text-right mb-6 shadow-inner">
+        <div class="flex justify-between items-start mb-3 border-b border-amber-100/50 pb-3">
+          <span class="bg-amber-500 text-white font-bold text-[10px] px-2.5 py-1 rounded-full">סופר סת"ם מוסמך</span>
+          <h4 class="font-black text-amber-800 text-lg leading-none">${s.name}</h4>
+        </div>
+        
+        <div class="space-y-2 text-sm text-slate-700">
+          <p>📍 <strong>מקום הכתיבה:</strong> ${s.location}</p>
+          <p>⏳ <strong>שנות ניסיון:</strong> ${s.experience}</p>
+          <p>📜 <strong>הסמכה ופיקוח:</strong> ${s.certification}</p>
+        </div>
+
+        <div class="mt-4 p-3 bg-white/80 rounded-xl border border-amber-100/50 text-xs text-amber-900 italic leading-relaxed">
+          "מלאכת כתיבת הסת\"ם במלכותא נעשית מתוך קדושה, יראת שמיים טהורה וריכוז מוחלט. כל אות מקבלת את תשומת הלב הראויה לה, ולאחר הכתיבה כל קלף עובר הגהה כפולה קפדנית על מנת להבטיח כשרות מהודרת ללא פשרות."
+        </div>
+      </div>
+
+      <div class="flex justify-between items-center">
+        <button class="text-slate-500 font-bold px-4 py-2 hover:bg-slate-100 rounded-xl transition text-sm" onclick="prevStep()">
+          ← חזרה לקלף
+        </button>
+        <button class="bg-slate-900 text-white font-bold px-6 py-3 rounded-xl hover:opacity-90 transition text-sm flex items-center gap-2" onclick="nextStep()">
+          המשך לסיכום ←
+        </button>
+      </div>
+    `;
+
+  } else if (wizardState.currentStep === 4) {
+    const selectedCase = mezuzahData.cases[wizardState.selectedCaseIndex];
+    const selectedScroll = mezuzahData.scrolls[wizardState.selectedScrollIndex];
+    
+    let summaryHTML = `
+      <div class="flex justify-between items-center py-2 border-b border-slate-100 text-sm">
+        <span class="font-bold text-slate-800">${selectedCase.price} ₪</span>
+        <span class="text-slate-600">בית מזוזה: ${selectedCase.name}</span>
+      </div>
+    `;
+
+    if (wizardState.includeScroll) {
+      summaryHTML += `
+        <div class="flex justify-between items-center py-2 border-b border-slate-100 text-sm">
+          <span class="font-bold text-slate-800">${selectedScroll.price} ₪</span>
+          <span class="text-slate-600">קלף סת"ם מהודר: ${selectedScroll.size} (${wizardState.selectedNusach})</span>
+        </div>
+        <div class="flex justify-between items-center py-2 border-b border-slate-100 text-sm text-emerald-600 bg-emerald-50/50 px-2 rounded-lg mt-1">
+          <span class="font-bold">-30 ₪</span>
+          <span>🎁 הטבת Bundle (הנחת מותג)</span>
+        </div>
+      `;
+    } else {
+      summaryHTML += `
+        <div class="p-2 bg-rose-50 border border-rose-100 rounded-lg text-rose-800 text-xs mt-2 leading-relaxed text-right">
+          ⚠️ אזהרה: ההזמנה אינה כוללת קלף סת"ם כשר. בית המזוזה יגיע ריק.
+        </div>
+      `;
+    }
+
+    stepHTML = `
+      ${progressBar}
+      <h3 class="text-xl font-bold text-slate-900 text-right mb-1">סיכום הזמנה ופרטי קשר</h3>
+      <p class="text-sm text-slate-500 text-right mb-4">שלב אחרון: השלמת המארז שלך</p>
+
+      <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 mb-5 text-right">
+        <h4 class="font-bold text-slate-700 text-sm mb-2 border-b border-slate-200 pb-1">פירוט המארז:</h4>
+        ${summaryHTML}
+        
+        <div class="flex justify-between items-center pt-3 mt-2 border-t border-slate-200">
+          <span class="text-xl font-black text-amber-600">${pricing.finalPrice} ₪</span>
+          <span class="font-bold text-slate-800">מחיר סופי לתשלום:</span>
+        </div>
+      </div>
+
+      <div class="space-y-3 mb-6 text-right">
+        <div>
+          <label class="block text-xs font-bold text-slate-600 mb-1">שם מלא:</label>
+          <input type="text" id="clientName" value="${wizardState.clientName}" oninput="wizardState.clientName = this.value" placeholder="הכנס את שמך" class="w-full p-2.5 border border-slate-200 rounded-lg text-sm bg-white focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-600 mb-1">טלפון ליצירת קשר (וואטסאפ):</label>
+          <input type="tel" id="clientPhone" value="${wizardState.clientPhone}" oninput="wizardState.clientPhone = this.value" placeholder="לדוגמה: 0521234567" class="w-full p-2.5 border border-slate-200 rounded-lg text-sm bg-white focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-600 mb-1">כתובת מלאה למשלוח:</label>
+          <input type="text" id="clientAddress" value="${wizardState.clientAddress || ''}" oninput="wizardState.clientAddress = this.value" placeholder="רחוב, מספר בית, דירה, עיר" class="w-full p-2.5 border border-slate-200 rounded-lg text-sm bg-white focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20">
+        </div>
+      </div>
+
+      <div class="flex justify-between items-center">
+        <button class="text-slate-500 font-bold px-4 py-2 hover:bg-slate-100 rounded-xl transition text-sm" onclick="prevStep()">
+          ← שלב קודם
+        </button>
+        <button id="submitBtn" class="bg-emerald-600 text-white font-extrabold px-6 py-3 rounded-xl hover:bg-emerald-500 transition text-sm flex items-center gap-2 shadow-md" onclick="submitBundleOrder()">
+          📲 אישור ושליחת הזמנה
+        </button>
+      </div>
+    `;
+  }
+
+  body.innerHTML = stepHTML;
+}
+
+function submitBundleOrder() {
+  const nameInput = document.getElementById('clientName');
+  const phoneInput = document.getElementById('clientPhone');
+  const addressInput = document.getElementById('clientAddress');
+  const submitBtn = document.getElementById('submitBtn');
+
+  if (!wizardState.clientName || !wizardState.clientName.trim()) {
+    alert("אנא הזן שם מלא לצורך השלמת ההזמנה");
+    if (nameInput) nameInput.focus();
+    return;
+  }
+  if (!wizardState.clientPhone || !wizardState.clientPhone.trim()) {
+    alert("אנא הזן מספר טלפון ליצירת קשר");
+    if (phoneInput) phoneInput.focus();
+    return;
+  }
+  if (!wizardState.clientAddress || !wizardState.clientAddress.trim()) {
+    alert("אנא הזן כתובת מלאה למשלוח");
+    if (addressInput) addressInput.focus();
+    return;
+  }
+
+  const selectedCase = mezuzahData.cases[wizardState.selectedCaseIndex];
+  const selectedScroll = mezuzahData.scrolls[wizardState.selectedScrollIndex];
+  const pricing = calculatePrice();
+
+  // נטרול הכפתור והצגת אנימציית "שולח..."
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `
+      <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" style="width: 20px; height: 20px;">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+      שולח...
+    `;
+    submitBtn.classList.remove('bg-emerald-600', 'hover:bg-emerald-500');
+    submitBtn.classList.add('bg-slate-400', 'cursor-not-allowed');
+  }
+
+  // 1. הרכבת נתוני JSON מובנים (Payload) עבור בקרת האוטומציה ב-Make
+  const orderPayload = {
+    order_date: new Date().toISOString(),
+    client_name: wizardState.clientName.trim(),
+    client_phone: wizardState.clientPhone.trim(),
+    client_address: wizardState.clientAddress.trim(),
+    bundle_type: wizardState.includeScroll ? 'complete_bundle' : 'case_only',
+    case_name: selectedCase.name,
+    case_price: selectedCase.price,
+    includes_scroll: wizardState.includeScroll,
+    scroll_size: wizardState.includeScroll ? selectedScroll.size : null,
+    scroll_nusach: wizardState.includeScroll ? wizardState.selectedNusach : null,
+    scroll_price: wizardState.includeScroll ? selectedScroll.price : 0,
+    scribe_name: wizardState.includeScroll ? selectedScroll.scribe.name : null,
+    discount_applied: pricing.discount,
+    total_price: pricing.finalPrice
+  };
+
+  console.log('%c[מלכותא סת"ם] ✓ Payload מובנה מוכן לאוטומציית Make webhook:', 'font-weight:bold;color:#10b981;', orderPayload);
+
+  // 2. בניית הודעת וואטסאפ מילולית אינטראקטיבית וחגיגית בהתאם לאסטרטגיית ה-Bundle (נבנית מראש)
+  let msg = `היי, אשמח להזמין את ה-Bundle המהודר של מלכותא! 📜✨\n\n`;
+  msg += `👤 שם הלקוח: ${wizardState.clientName}\n`;
+  msg += `📞 טלפון: ${wizardState.clientPhone}\n`;
+  msg += `📍 כתובת למשלוח: ${wizardState.clientAddress}\n`;
+  msg += `🏠 בית מזוזה שנבחר: ${selectedCase.name} (${selectedCase.price} ₪)\n`;
+  
+  if (wizardState.includeScroll) {
+    msg += `🖋️ קלף מזוזה כשר: קלף ${selectedScroll.size} (${selectedScroll.price} ₪)\n`;
+    msg += `📜 נוסח הלכתי: ${wizardState.selectedNusach}\n`;
+    msg += `✍️ נכתב על ידי הסופר: ${selectedScroll.scribe.name}\n`;
+    msg += `🎁 הנחת מארז Bundle: -30 ₪\n\n`;
+  } else {
+    msg += `⚠️ ללא קלף סת"ם (בית מזוזה בלבד)\n\n`;
+  }
+  
+  msg += `💰 סה"כ לתשלום: ${pricing.finalPrice} ₪\n\n`;
+  msg += `אשמח אם תחזרו אליי לאישור ההזמנה ופרטי משלוח! תודה.`;
+
+  // פונקציית מעבר לוואטסאפ ואיפוס המודאל (כשל לוגי חסין - Fallback)
+  const completeOrderAndRedirect = () => {
+    // איפוס הטופס ומצב הויזארד
+    wizardState = {
+      currentStep: 1,
+      selectedCaseIndex: 0,
+      includeScroll: true,
+      selectedScrollIndex: 1,
+      selectedNusach: 'ספרדי (עדות המזרח)',
+      clientName: '',
+      clientPhone: '',
+      clientAddress: ''
+    };
+
+    // סגירת המודאל
+    closeMezuzahModal();
+
+    // העברת המשתמש לוואטסאפ - שימוש ב-location.href עוקף לחלוטין את חוסם הפופ-אפים של הדפדפנים!
+    window.location.href = waLink(msg);
+  };
+
+  // 3. שליחת נתוני ההזמנה ל-Webhook של Make ב-Fetch
+  // שימוש בטיימאאוט קצר כדי שאם השרת איטי או לא מגיב, הלקוח לא ייתקע
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 4000); // 4 שניות טיימאאוט
+
+  fetch(MAKE_WEBHOOK_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(orderPayload),
+    signal: controller.signal
+  })
+  .then(response => {
+    clearTimeout(timeoutId);
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    console.log('[מלכותא] Webhook נשלח בהצלחה ל-Make');
+    completeOrderAndRedirect();
+  })
+  .catch(error => {
+    clearTimeout(timeoutId);
+    console.error('[מלכותא] שגיאה בשליחת Webhook (מעבר לוואטסאפ כגיבוי):', error);
+    // פתרון קריטי: גם אם ה-Webhook נכשל, נחסם או לקח לו יותר מדי זמן - אנחנו עדיין מעבירים את הלקוח לוואטסאפ כדי לא לאבד את המכירה!
+    completeOrderAndRedirect();
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const modalEl = document.getElementById('mezuzahModal');
+  if (modalEl) {
+    modalEl.addEventListener('click', e => {
+      if (e.target === modalEl) closeMezuzahModal();
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && modalEl.classList.contains('open')) {
+        closeMezuzahModal();
+      }
+    });
+  }
+
+  const tefillinModalEl = document.getElementById('tefillinModal');
+  if (tefillinModalEl) {
+    tefillinModalEl.addEventListener('click', e => {
+      if (e.target === tefillinModalEl) closeTefillinModal();
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && tefillinModalEl.classList.contains('open')) {
+        closeTefillinModal();
+      }
+    });
+  }
+
+  const waHeader = document.getElementById('waHeader');
+  if (waHeader) waHeader.href = waLink('שלום, אשמח לקבל פרטים על סטי התפילין');
+
+  const waFloat = document.getElementById('waFloat');
+  if (waFloat) waFloat.href = waLink('שלום, אשמח לקבל פרטים');
+
+  document.querySelectorAll('a[data-wa]').forEach(a => {
+    a.href = waLink(a.dataset.wa);
+  });
+
+  // פתרון קריטי: מניעת שגיאת 404 בדפים לא קיימים על ידי הפניה אוטומטית לוואטסאפ או לדף הבית
+  document.querySelectorAll('a[href="contact.html"]').forEach(a => {
+    a.href = waLink('שלום, הגעתי מאתר מלכותא ואשמח לקבל ייעוץ ובירור אישי לגבי מוצרי סת"ם כשרים');
+    a.target = '_blank';
+    a.rel = 'noopener';
+  });
+
+  document.querySelectorAll('a[href="about.html"]').forEach(a => {
+    a.href = waLink('שלום, אשמח לשמוע עוד פרטים אודות בית היוצר מלכותא סת"ם');
+    a.target = '_blank';
+    a.rel = 'noopener';
+  });
+
+  document.querySelectorAll('a[href="allproducts.html"]').forEach(a => {
+    a.href = 'catalog.html';
+  });
+});
+
+/* ============================================================
+   מלכותא - מנגנון מודאל Bundle תפילין אינטראקטיבי מעודכן (tefillin-modal)
+   ============================================================ */
+
+var tefillinData = {
+  sets: [
+    {
+      name: 'סט בר מצווה – קו יהלום כחול-לבן',
+      price: 2699,
+      img: 'images/set-yahalom-blue.jpg',
+      desc: 'סט מהודר במיוחד הכולל תפילין בהמה גסה, טלית צמר טהור, נרתיקי קטיפה/זמש כחולים מעוצבים, סידור וכיפה תואמת.'
+    },
+    {
+      name: "סט קו שהם – דגם ה' כתר זהב",
+      price: 2450,
+      img: 'images/set-shoham-gold.jpg',
+      desc: "ערכת תפילין מושלמת בגימור שמנת-זהב יוקרתי, כולל הטבעת האות ה' וברכת הכוהנים, סידור מהודר וכיפת זמש תואמת."
+    },
+    {
+      name: 'סט קו שהם – דגם להבת אש',
+      price: 2390,
+      img: 'images/set-shoham-cream.jpg',
+      desc: 'עיצוב ייחודי עם אלמנט להבת הקודש, נרתיקים בגוון שמנת-זמש עמיד, כיפה תואמת וסידור שירת הלב בעיטורי זהב.'
+    },
+    {
+      name: 'סט קו שהם – דגם זמש חום כהה',
+      price: 2290,
+      img: 'images/set-shoham-brown.jpg',
+      desc: 'נרתיקי זמש חום עמוק בהטבעת זהב יוקרתית, כולל תפילין בהמה גסה, טלית איכותית וסידור מהודר בכריכת עור.'
+    }
+  ],
+  scribe: {
+    name: 'הרב שלמה גולדשטיין',
+    location: 'קריית ארבע, חברון',
+    experience: '15 שנות כתיבת תפילין מהודרות',
+    certification: 'מוסמך לשכת הקודש ועד משמרת סת"ם'
+  }
+};
+
+var tefillinWizardState = {
+  currentStep: 1,
+  selectedSetIndex: 0,
+  selectedNusach: 'ספרדי (עדות המזרח)',
+  embroideryName: '',
+  clientName: '',
+  clientPhone: '',
+  clientAddress: ''
+};
+
+var TEFILLIN_NUSACH_OPTIONS = [
+  'ספרדי (עדות המזרח)',
+  'אשכנזי (ואליש / בית יוסף)',
+  'חב"ד (האר"י)'
+];
+
+function openTefillinModal(index) {
+  const modalEl = document.getElementById('tefillinModal');
+  if (!modalEl) return;
+
+  tefillinWizardState = {
+    currentStep: 1,
+    selectedSetIndex: index,
+    selectedNusach: 'ספרדי (עדות המזרח)',
+    embroideryName: '',
+    clientName: '',
+    clientPhone: '',
+    clientAddress: ''
+  };
+
+  renderTefillinWizard();
+  modalEl.style.display = 'flex';
+  modalEl.classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  const closeBtn = modalEl.querySelector('.close-btn');
+  if (closeBtn) closeBtn.focus();
+}
+
+function closeTefillinModal() {
+  const modalEl = document.getElementById('tefillinModal');
+  if (modalEl) {
+    modalEl.style.display = 'none';
+    modalEl.classList.remove('open');
+  }
+  document.body.style.overflow = '';
+}
+
+function nextTefillinStep() {
+  tefillinWizardState.currentStep++;
+  renderTefillinWizard();
+}
+
+function prevTefillinStep() {
+  tefillinWizardState.currentStep--;
+  renderTefillinWizard();
+}
+
+function handleTefillinNusachChange(val) {
+  tefillinWizardState.selectedNusach = val;
+}
+
+function renderTefillinWizard() {
+  const body = document.getElementById('tefillinModalBody');
+  if (!body) return;
+
+  const selectedSet = tefillinData.sets[tefillinWizardState.selectedSetIndex];
+  let stepHTML = '';
+
+  const progressPercent = ((tefillinWizardState.currentStep - 1) / 3) * 100;
+  const progressBar = `
+    <div class="w-full bg-slate-100 h-2 rounded-full mb-6 overflow-hidden relative" style="direction: ltr;">
+      <div class="bg-amber-500 h-full transition-all duration-300 rounded-full" style="width: ${progressPercent}%; float: right;"></div>
+    </div>
+  `;
+
+  if (tefillinWizardState.currentStep === 1) {
+    // שלב 1: אישור הסט שנבחר
+    stepHTML = `
+      ${progressBar}
+      <h3 class="text-xl font-bold text-slate-900 text-right mb-1">התאמת ערכת תפילין מהודרת</h3>
+      <p class="text-sm text-slate-500 text-right mb-4">שלב 1 מתוך 4: אישור הדגם שנבחר</p>
+      
+      <div class="border border-slate-100 rounded-2xl p-4 bg-slate-50/50 mb-6 text-right">
+        <img src="${selectedSet.img}" alt="${selectedSet.name}" class="w-full h-40 object-cover rounded-xl mb-3" onerror="imgFallback(this)">
+        <h4 class="font-extrabold text-slate-800 text-lg mb-1">${selectedSet.name}</h4>
+        <p class="text-xs text-slate-500 leading-relaxed mb-2">${selectedSet.desc}</p>
+        <div class="text-xl font-black text-amber-600">${selectedSet.price} ₪</div>
+      </div>
+
+      <div class="flex justify-end">
+        <button class="bg-slate-900 text-white font-bold px-6 py-3 rounded-xl hover:opacity-90 transition text-sm flex items-center gap-2" onclick="nextTefillinStep()">
+          המשך לבחירת נוסח והקדשה ←
+        </button>
+      </div>
+    `;
+
+  } else if (tefillinWizardState.currentStep === 2) {
+    // שלב 2: נוסח והקדשה (הטבעה)
+    const nusachOptions = TEFILLIN_NUSACH_OPTIONS.map(n => {
+      const isSelected = tefillinWizardState.selectedNusach === n;
+      return `<option value="${n}" ${isSelected ? 'selected' : ''}>${n}</option>`;
+    }).join('');
+
+    stepHTML = `
+      ${progressBar}
+      <h3 class="text-xl font-bold text-slate-900 text-right mb-1">התאמה אישית והטבעה</h3>
+      <p class="text-sm text-slate-500 text-right mb-4">שלב 2 מתוך 4: נוסח ושם על הנרתיק</p>
+
+      <div class="space-y-4 mb-6 text-right">
+        <div>
+          <label class="block text-xs font-bold text-slate-600 mb-1">בחר נוסח כתיבה הלכתי:</label>
+          <select id="tefillinNusach" class="w-full p-2.5 border border-slate-200 rounded-lg text-sm bg-white" onchange="handleTefillinNusachChange(this.value)">
+            ${nusachOptions}
+          </select>
+        </div>
+
+        <div class="bg-amber-50/50 p-4 rounded-xl border border-amber-100/50">
+          <label class="block text-xs font-bold text-amber-900 mb-1">שם להטבעת זהב יוקרטית על הנרתיק (חינם):</label>
+          <input type="text" id="embroideryName" value="${tefillinWizardState.embroideryName}" oninput="tefillinWizardState.embroideryName = this.value" placeholder="לדוגמה: אוריאל חיים (השאר ריק אם אינך מעוניין)" class="w-full p-2.5 border border-slate-200 rounded-lg text-sm bg-white focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20">
+          <p class="text-[10px] text-amber-700 mt-1">🎁 הטבעה אישית של שם חתן בר המצווה בזהב עתיק היא מתנה בלעדית מאיתנו לכל רוכש סט תפילין.</p>
+        </div>
+      </div>
+
+      <div class="flex justify-between items-center">
+        <button class="text-slate-500 font-bold px-4 py-2 hover:bg-slate-100 rounded-xl transition text-sm" onclick="prevTefillinStep()">
+          ← חזרה לדגם
+        </button>
+        <button class="bg-slate-900 text-white font-bold px-6 py-3 rounded-xl hover:opacity-90 transition text-sm flex items-center gap-2" onclick="nextTefillinStep()">
+          המשך להכרת הסופר ←
+        </button>
+      </div>
+    `;
+
+  } else if (tefillinWizardState.currentStep === 3) {
+    // שלב 3: חשיפת הסופר
+    const s = tefillinData.scribe;
+
+    stepHTML = `
+      ${progressBar}
+      <h3 class="text-xl font-bold text-slate-900 text-right mb-1">הכירו את סופר הסת"ם שלכם</h3>
+      <p class="text-sm text-slate-500 text-right mb-4">שלב 3 מתוך 4: אמינות וקשר אישי</p>
+
+      <div class="bg-amber-50/40 border border-amber-100 p-5 rounded-2xl text-right mb-6 shadow-inner">
+        <div class="flex justify-between items-start mb-3 border-b border-amber-100/50 pb-3">
+          <span class="bg-amber-500 text-white font-bold text-[10px] px-2.5 py-1 rounded-full">סופר סת"ם מוסמך</span>
+          <h4 class="font-black text-amber-800 text-lg leading-none">${s.name}</h4>
+        </div>
+        
+        <div class="space-y-2 text-sm text-slate-700">
+          <p>📍 <strong>מקום הכתיבה:</strong> ${s.location}</p>
+          <p>⏳ <strong>שנות ניסיון:</strong> ${s.experience}</p>
+          <p>📜 <strong>הסמכה ופיקוח:</strong> ${s.certification}</p>
+        </div>
+
+        <div class="mt-4 p-3 bg-white/80 rounded-xl border border-amber-100/50 text-xs text-amber-900 italic leading-relaxed">
+          "כתיבת פרשיות התפילין שלכם מבוצעת על קלף שליל מובחר, ביראת קודש עמוקה וכוונה מוחלטת לשם מצוות תפילין. לאחר השלמת הכתיבה, הפרשיות עוברות סדרת הגהה כפולה - הגהה אנושית מוקפדת על ידי שני מגיהים מוסמכים וסריקה דיגיטלית ממוחשבת, על מנת להעניק לכם ביטחון הלכתי מלא."
+        </div>
+      </div>
+
+      <div class="flex justify-between items-center">
+        <button class="text-slate-500 font-bold px-4 py-2 hover:bg-slate-100 rounded-xl transition text-sm" onclick="prevTefillinStep()">
+          ← חזרה להתאמה
+        </button>
+        <button class="bg-slate-900 text-white font-bold px-6 py-3 rounded-xl hover:opacity-90 transition text-sm flex items-center gap-2" onclick="nextTefillinStep()">
+          המשך לפרטי משלוח ←
+        </button>
+      </div>
+    `;
+
+  } else if (tefillinWizardState.currentStep === 4) {
+    // שלב 4: פרטי משלוח, סיכום והזמנה
+    let summaryHTML = `
+      <div class="flex justify-between items-center py-2 border-b border-slate-100 text-sm">
+        <span class="font-bold text-slate-800">${selectedSet.price} ₪</span>
+        <span class="text-slate-600">${selectedSet.name}</span>
+      </div>
+      <div class="flex justify-between items-center py-2 border-b border-slate-100 text-sm">
+        <span class="font-bold text-slate-800">כלול בערכה</span>
+        <span class="text-slate-600">נוסח כתיבה: ${tefillinWizardState.selectedNusach}</span>
+      </div>
+    `;
+
+    if (tefillinWizardState.embroideryName.trim()) {
+      summaryHTML += `
+        <div class="flex justify-between items-center py-2 border-b border-slate-100 text-sm text-amber-700 bg-amber-50/30 px-2 rounded-lg mt-1">
+          <span class="font-bold">חינם (🎁 מתנה)</span>
+          <span>הטבעת זהב על הנרתיק: "${tefillinWizardState.embroideryName.trim()}"</span>
+        </div>
+      `;
+    }
+
+    summaryHTML += `
+      <div class="flex justify-between items-center py-2 border-b border-slate-100 text-sm text-emerald-600 bg-emerald-50/30 px-2 rounded-lg mt-1">
+        <span class="font-bold">כלול במארז</span>
+        <span>📜 תעודת אחריות דיגיטלית ואישית ב-PDF</span>
+      </div>
+    `;
+
+    stepHTML = `
+      ${progressBar}
+      <h3 class="text-xl font-bold text-slate-900 text-right mb-1">סיכום הזמנה ופרטי משלוח</h3>
+      <p class="text-sm text-slate-500 text-right mb-4">שלב אחרון: פרטי קשר ומשלוח מהיר</p>
+
+      <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 mb-5 text-right">
+        <h4 class="font-bold text-slate-700 text-sm mb-2 border-b border-slate-200 pb-1">פירוט המארז המהודר שלך:</h4>
+        ${summaryHTML}
+        
+        <div class="flex justify-between items-center pt-3 mt-2 border-t border-slate-200">
+          <span class="text-xl font-black text-amber-600">${selectedSet.price} ₪</span>
+          <span class="font-bold text-slate-800">סה"כ לתשלום (משלוח חינם):</span>
+        </div>
+      </div>
+
+      <div class="space-y-3 mb-6 text-right">
+        <div>
+          <label class="block text-xs font-bold text-slate-600 mb-1">שם מלא:</label>
+          <input type="text" id="tefillinClientName" value="${tefillinWizardState.clientName}" oninput="tefillinWizardState.clientName = this.value" placeholder="הכנס את שמך" class="w-full p-2.5 border border-slate-200 rounded-lg text-sm bg-white focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-600 mb-1">טלפון ליצירת קשר (וואטסאפ):</label>
+          <input type="tel" id="tefillinClientPhone" value="${tefillinWizardState.clientPhone}" oninput="tefillinWizardState.clientPhone = this.value" placeholder="לדוגמה: 0521234567" class="w-full p-2.5 border border-slate-200 rounded-lg text-sm bg-white focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-600 mb-1">כתובת מלאה למשלוח:</label>
+          <input type="text" id="tefillinClientAddress" value="${tefillinWizardState.clientAddress || ''}" oninput="tefillinWizardState.clientAddress = this.value" placeholder="רחוב, מספר בית, דירה, עיר" class="w-full p-2.5 border border-slate-200 rounded-lg text-sm bg-white focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20">
+        </div>
+      </div>
+
+      <div class="flex justify-between items-center">
+        <button class="text-slate-500 font-bold px-4 py-2 hover:bg-slate-100 rounded-xl transition text-sm" onclick="prevTefillinStep()">
+          ← שלב קודם
+        </button>
+        <button id="tefillinSubmitBtn" class="bg-emerald-600 text-white font-extrabold px-6 py-3 rounded-xl hover:bg-emerald-500 transition text-sm flex items-center gap-2 shadow-md" onclick="submitTefillinOrder()">
+          📲 אישור ושליחת הזמנה
+        </button>
+      </div>
+    `;
+  }
+
+  body.innerHTML = stepHTML;
+}
+
+function submitTefillinOrder() {
+  const nameInput = document.getElementById('tefillinClientName');
+  const phoneInput = document.getElementById('tefillinClientPhone');
+  const addressInput = document.getElementById('tefillinClientAddress');
+  const submitBtn = document.getElementById('tefillinSubmitBtn');
+
+  if (!tefillinWizardState.clientName || !tefillinWizardState.clientName.trim()) {
+    alert("אנא הזן שם מלא לצורך השלמת ההזמנה");
+    if (nameInput) nameInput.focus();
+    return;
+  }
+  if (!tefillinWizardState.clientPhone || !tefillinWizardState.clientPhone.trim()) {
+    alert("אנא הזן מספר טלפון ליצירת קשר");
+    if (phoneInput) phoneInput.focus();
+    return;
+  }
+  if (!tefillinWizardState.clientAddress || !tefillinWizardState.clientAddress.trim()) {
+    alert("אנא הזן כתובת מלאה למשלוח");
+    if (addressInput) addressInput.focus();
+    return;
+  }
+
+  const selectedSet = tefillinData.sets[tefillinWizardState.selectedSetIndex];
+  const s = tefillinData.scribe;
+
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `
+      <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" style="width: 20px; height: 20px;">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+      שולח...
+    `;
+    submitBtn.classList.remove('bg-emerald-600', 'hover:bg-emerald-500');
+    submitBtn.classList.add('bg-slate-400', 'cursor-not-allowed');
+  }
+
+  const orderPayload = {
+    order_date: new Date().toISOString(),
+    client_name: tefillinWizardState.clientName.trim(),
+    client_phone: tefillinWizardState.clientPhone.trim(),
+    client_address: tefillinWizardState.clientAddress.trim(),
+    bundle_type: 'tefillin_bundle',
+    set_name: selectedSet.name,
+    set_price: selectedSet.price,
+    scroll_nusach: tefillinWizardState.selectedNusach,
+    embroidery_name: tefillinWizardState.embroideryName.trim() || null,
+    scribe_name: s.name,
+    total_price: selectedSet.price
+  };
+
+  console.log('%c[מלכותא סת"ם] ✓ Tefillin Payload מוכן לאוטומציית Make:', 'font-weight:bold;color:#10b981;', orderPayload);
+
+  let msg = `היי, אשמח להזמין את סט התפילין המהודר של מלכותא! 📦✨\n\n`;
+  msg += `👤 שם הלקוח: ${tefillinWizardState.clientName}\n`;
+  msg += `📞 טלפון: ${tefillinWizardState.clientPhone}\n`;
+  msg += `📍 כתובת למשלוח: ${tefillinWizardState.clientAddress}\n`;
+  msg += `📦 דגם הסט: ${selectedSet.name} (${selectedSet.price} ₪)\n`;
+  msg += `📜 נוסח כתיבה הלכתי: ${tefillinWizardState.selectedNusach}\n`;
+  
+  if (tefillinWizardState.embroideryName.trim()) {
+    msg += `✍️ שם להטבעה בזהב על הנרתיק: "${tefillinWizardState.embroideryName.trim()}"\n`;
+  } else {
+    msg += `✍️ ללא הטבעת שם (נרתיק נקי)\n`;
+  }
+  
+  msg += `✍️ נכתב על ידי הסופר: ${s.name}\n`;
+  msg += `📜 כולל תעודת אחריות דיגיטלית ואישית ב-PDF\n\n`;
+  msg += `💰 סה"כ לתשלום (משלוח חינם): ${selectedSet.price} ₪\n\n`;
+  msg += `אשמח אם תחזרו אליי לאישור ההזמנה ופרטי משלוח! תודה.`;
+
+  const completeOrderAndRedirect = () => {
+    tefillinWizardState = {
+      currentStep: 1,
+      selectedSetIndex: 0,
+      selectedNusach: 'ספרדי (עדות המזרח)',
+      embroideryName: '',
+      clientName: '',
+      clientPhone: '',
+      clientAddress: ''
+    };
+
+    closeTefillinModal();
+    window.location.href = waLink(msg);
+  };
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 4000);
+
+  fetch(MAKE_WEBHOOK_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(orderPayload),
+    signal: controller.signal
+  })
+  .then(response => {
+    clearTimeout(timeoutId);
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    console.log('[מלכותא] Tefillin Webhook נשלח בהצלחה ל-Make');
+    completeOrderAndRedirect();
+  })
+  .catch(error => {
+    clearTimeout(timeoutId);
+    console.error('[מלכותא] שגיאה בשליחת Webhook (מעבר לוואטסאפ כגיבוי):', error);
+    completeOrderAndRedirect();
+  });
+}
+
+</script>
+</body>
+</html>

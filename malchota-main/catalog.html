@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>מלכותא סת"ם | קטלוג הסטים המהודרים</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Heebo:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+<script>
+/* ============================================================
+   מנגנון גיבוי לתמונות — מונע ריבועים שבורים במקרה של חוסר בתמונות פיזיות
+   ============================================================ */
+var PLACEHOLDER = 'data:image/svg+xml;utf8,' + encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 280">' +
+  '<rect width="400" height="280" fill="%23f1f5f9"/>' +
+  '<g fill="none" stroke="%23c59b27" stroke-width="2" stroke-linecap="round">' +
+  '<line x1="180" y1="150" x2="180" y2="128"/><line x1="200" y1="150" x2="200" y2="120"/>' +
+  '<line x1="220" y1="150" x2="220" y2="128"/></g>' +
+  '<circle cx="180" cy="122" r="4" fill="%23c59b27"/><circle cx="200" cy="114" r="4" fill="%23c59b27"/>' +
+  '<circle cx="220" cy="122" r="4" fill="%23c59b27"/>' +
+  '<text x="200" y="185" font-family="sans-serif" font-size="15" fill="%2394a3b8" text-anchor="middle">' +
+  'תמונה בהכנה</text></svg>'
+);
+
+window.imgFallback = function(img){
+  if(img) {
+    if(img.dataset.failed) return; // מונע לולאה אינסופית
+    img.dataset.failed = '1';
+    console.error('[מלכותא] ✗ תמונה לא נמצאה (404):', img.getAttribute('src'));
+    img.src = PLACEHOLDER;
+    img.classList.add('img-fallback');
+  }
+};
+</script>
+
+<style>
+:root {
+--brand-navy: #0f172a;
+--brand-gold: #c59b27;
+--brand-gold-light: #fef08a;
+--brand-bg: #fdfbf7;
+}
+
+body {
+font-family: 'Assistant', 'Heebo', sans-serif;
+background-color: var(--brand-bg);
+color: #1e293b;
+}
+
+.gold-border { border-color: var(--brand-gold); }
+.gold-text { color: var(--brand-gold); }
+.gold-bg { background-color: var(--brand-gold); }
+.navy-bg { background-color: var(--brand-navy); }
+
+.product-card {
+background: #ffffff;
+border-radius: 20px;
+overflow: hidden;
+box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+border: 1px solid #f1f5f9;
+transition: transform 0.3s ease, box-shadow 0.3s ease;
+display: flex;
+flex-direction: column;
+}
+
+.product-card:hover {
+transform: translateY(-5px);
+box-shadow: 0 20px 30px -10px rgba(197, 155, 39, 0.15);
+}
+
+.img-container {
+width: 100%;
+height: 280px;
+background-color: #f8fafc;
+display: flex;
+align-items: center;
+justify-content: center;
+overflow: hidden;
+}
+
+.img-container img {
+width: 100%;
+height: 100%;
+object-fit: cover;
+transition: transform 0.5s ease;
+}
+
+.product-card:hover .img-container img {
+transform: scale(1.04);
+}
+
+/* תמונה שנכשלה — לא לחתוך את הפלייסהולדר */
+.img-container img.img-fallback { object-fit: contain; }
+
+button.img-container {
+border: none;
+padding: 0;
+font: inherit;
+cursor: pointer;
+}
+
+/* ===== חלון המפרט (Modal) ===== */
+.modal-overlay {
+position: fixed; inset: 0; z-index: 2001;
+background: rgba(15, 23, 42, 0.72); backdrop-filter: blur(3px);
+display: none; align-items: center; justify-content: center; padding: 20px;
+overflow-y: auto; /* מאפשר גלילה של כל הבלוק אם הוא גבוה מדי במובייל */
+}
+
+.modal-overlay.open { display: flex; }
+
+.modal-content {
+background: #fff; border-radius: 20px; border-top: 4px solid var(--brand-gold);
+width: 100%; max-width: 520px; max-height: 88vh; overflow-y: auto;
+padding: 28px 24px 24px; position: relative;
+box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+animation: modalIn 0.25s ease;
+}
+
+@media (max-width: 640px) {
+  .modal-overlay {
+    align-items: flex-start; /* הצמדה לחלק העליון במובייל למניעת הסתרה ע"י המקלדת */
+    padding: 10px;
+  }
+  .modal-content {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    max-height: none; /* ביטול הגבלת הגובה של הקופסה כדי שהגלילה תהיה על האוברליי הראשי במובייל */
+  }
+}
+
+@keyframes modalIn {
+from { opacity: 0; transform: translateY(16px) scale(0.98); }
+to   { opacity: 1; transform: none; }
+}
+
+.close-btn {
+position: absolute; top: 10px; left: 14px; background: none; border: none;
+font-size: 2rem; line-height: 1; color: #94a3b8; cursor: pointer; padding: 2px 9px; border-radius: 8px;
+}
+
+.close-btn:hover { color: var(--brand-navy); background: #f1f5f9; }
+
+/* Animations */
+@keyframes fadeIn {
+from { opacity: 0; transform: translateY(8px); }
+to { opacity: 1; transform: none; }
+}
+.animate-fadeIn {
+animation: fadeIn 0.3s ease-out forwards;
+}
+</style>
+</head>
+
+<body class="antialiased min-h-screen flex flex-col">
+
+<!-- Header Navigation -->
+<header class="navy-bg text-white sticky top-0 z-50 shadow-md">
+  <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+    <a href="index.html" class="flex items-center gap-2">
+      <span class="text-2xl font-black tracking-wider gold-text">מלכותא סת"ם</span>
+    </a>
+    <nav class="hidden md:flex gap-6 font-semibold">
+      <a href="index.html" class="hover:text-amber-400 transition">דף הבית</a>
+      <a href="catalog.html" class="gold-text border-b-2 gold-border pb-1">קטלוג המוצרים</a>
+      <a href="about.html" class="hover:text-amber-400 transition">אודות</a>
+    </nav>
+    <a id="waHeader" href="#" target="_blank" rel="noopener" class="gold-bg text-slate-900 font-bold px-4 py-2 rounded-full hover:bg-amber-300 transition text-sm">
+      ייעוץ אישי בוואטסאפ 📱
+    </a>
+  </div>
+</header>
+
+<!-- Banner -->
+<section class="navy-bg text-white py-12 px-4 text-center border-b-4 gold-border">
+  <div class="max-w-3xl mx-auto">
+    <h1 class="text-3xl md:text-5xl font-black mb-3 gold-text">קטלוג הסטים המהודרים של מלכותא</h1>
+    <p class="text-lg md:text-xl text-slate-300">קנייה ישירה מהסופר – כתיבה תמה, הידור הלכתי מושלם ועיצוב יוקרתי לבר מצווה ולכל החיים</p>
+  </div>
+</section>
+
+<!-- Category Tabs Section -->
+<section class="max-w-7xl mx-auto px-4 pt-10 pb-2 text-center">
+  <div class="flex flex-wrap justify-center gap-3 md:gap-4">
+    <button type="button" onclick="filterCategory('all')" id="tab-all" class="px-5 py-2.5 rounded-full font-bold text-sm transition-all duration-200 shadow-sm border-2 border-amber-500 bg-amber-500 text-slate-900">
+      ✨ הכל
+    </button>
+    <button type="button" onclick="filterCategory('tefillin')" id="tab-tefillin" class="px-5 py-2.5 rounded-full font-bold text-sm transition-all duration-200 shadow-sm border-2 border-slate-200 bg-white text-slate-700 hover:border-amber-500 hover:text-amber-600">
+      📦 סטי תפילין לבר מצווה
+    </button>
+    <button type="button" onclick="filterCategory('mezuzah')" id="tab-mezuzah" class="px-5 py-2.5 rounded-full font-bold text-sm transition-all duration-200 shadow-sm border-2 border-slate-200 bg-white text-slate-700 hover:border-amber-500 hover:text-amber-600">
+      📜 מזוזות ובאנדלים כשרים
+    </button>
+    <button type="button" onclick="filterCategory('accessories')" id="tab-accessories" class="px-5 py-2.5 rounded-full font-bold text-sm transition-all duration-200 shadow-sm border-2 border-slate-200 bg-white text-slate-700 hover:border-amber-500 hover:text-amber-600">
+      🎨 אביזרים ועיצוב אישי
+    </button>
+  </div>
+</section>
+
+<!-- Main Catalog Grid -->
+<main class="max-w-7xl mx-auto px-4 py-12 flex-grow w-full">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+    <!-- המוצר: סט קו יהלום כחול -->
+    <div class="product-card" data-category="tefillin">
+      <div class="relative">
+        <span class="absolute top-3 right-3 gold-bg text-slate-900 font-extrabold text-xs px-3 py-1 rounded-full z-10 shadow">קו יהלום VIP</span>
+        <div class="img-container">
+          <img src="images/set-yahalom-blue.jpg" alt="סט בר מצווה קו יהלום כחול-לבן" loading="lazy" onerror="imgFallback(this)">
+        </div>
+      </div>
+      <div class="p-6 flex flex-col flex-grow">
+        <h3 class="text-2xl font-bold mb-2 text-slate-900">סט בר מצווה – קו יהלום כחול-לבן</h3>
+        <p class="text-slate-600 text-sm mb-4 leading-relaxed flex-grow">
+          סט מהודר במיוחד הכולל תפילין בהמה גסה, טלית צמר טהור, נרתיקי קטיפה/זמש כחולים מעוצבים, סידור וכיפה תואמת.
+        </p>
+        <div class="flex justify-between items-center pt-2 border-t border-slate-100">
+          <span class="text-2xl font-black gold-text">₪2,699</span>
+          <button type="button" onclick="openTefillinModal(0)" class="bg-amber-500 text-slate-900 font-extrabold px-4 py-2 rounded-xl hover:bg-amber-400 transition text-sm shadow-md">
+            התאמה אישית והזמנה ←
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- המוצר: סט קו שהם כתר זהב -->
+    <div class="product-card" data-category="tefillin">
+      <div class="relative">
+        <span class="absolute top-3 right-3 bg-amber-500 text-white font-extrabold text-xs px-3 py-1 rounded-full z-10 shadow">דגם כתר זהב</span>
+        <div class="img-container">
+          <img src="images/set-shoham-gold.jpg" alt="סט קו שהם דגם כתר זהב" loading="lazy" onerror="imgFallback(this)">
+        </div>
+      </div>
+      <div class="p-6 flex flex-col flex-grow">
+        <h3 class="text-2xl font-bold mb-2 text-slate-900">סט קו שהם – דגם ה' כתר זהב</h3>
+        <p class="text-slate-600 text-sm mb-4 leading-relaxed flex-grow">
+          ערכת תפילין מושלמת בגימור שמנת-זהב יוקרתי, כולל הטבעת האות ה' וברכת הכוהנים, סידור מהודר וכיפת זמש תואמת.
+        </p>
+        <div class="flex justify-between items-center pt-2 border-t border-slate-100">
+          <span class="text-2xl font-black gold-text">₪2,450</span>
+          <button type="button" onclick="openTefillinModal(1)" class="bg-amber-500 text-slate-900 font-extrabold px-4 py-2 rounded-xl hover:bg-amber-400 transition text-sm shadow-md">
+            התאמה אישית והזמנה ←
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- המוצר: סט קו שהם להבת אש -->
+    <div class="product-card" data-category="tefillin">
+      <div class="relative">
+        <span class="absolute top-3 right-3 bg-red-800 text-white font-extrabold text-xs px-3 py-1 rounded-full z-10 shadow">דגם ירושלים / VIP</span>
+        <div class="img-container">
+          <img src="images/set-shoham-cream.jpg" alt="סט קו שהם דגם להבת אש" loading="lazy" onerror="imgFallback(this)">
+        </div>
+      </div>
+      <div class="p-6 flex flex-col flex-grow">
+        <h3 class="text-2xl font-bold mb-2 text-slate-900">סט קו שהם – דגם להבת אש</h3>
+        <p class="text-slate-600 text-sm mb-4 leading-relaxed flex-grow">
+          עיצוב ייחודי עם אלמנט להבת הקודש, נרתיקים בגוון שמנת-זמש עמיד, כיפה תואמת וסידור שירת הלב בעיטורי זהב.
+        </p>
+        <div class="flex justify-between items-center pt-2 border-t border-slate-100">
+          <span class="text-2xl font-black gold-text">₪2,390</span>
+          <button type="button" onclick="openTefillinModal(2)" class="bg-amber-500 text-slate-900 font-extrabold px-4 py-2 rounded-xl hover:bg-amber-400 transition text-sm shadow-md">
+            התאמה אישית והזמנה ←
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- המוצר: סט קו שהם חום כשרות -->
+    <div class="product-card" data-category="tefillin">
+      <div class="relative">
+        <span class="absolute top-3 right-3 bg-amber-900 text-white font-extrabold text-xs px-3 py-1 rounded-full z-10 shadow">דגם כשרות זמש</span>
+        <div class="img-container">
+          <img src="images/set-shoham-brown.jpg" alt="סט קו שהם דגם זמש חום" loading="lazy" onerror="imgFallback(this)">
+        </div>
+      </div>
+      <div class="p-6 flex flex-col flex-grow">
+        <h3 class="text-2xl font-bold mb-2 text-slate-900">סט קו שהם – דגם זמש חום כהה</h3>
+        <p class="text-slate-600 text-sm mb-4 leading-relaxed flex-grow">
+          נרתיקי זמש חום עמוק בהטבעת זהב יוקרתית, כולל תפילין בהמה גסה, טלית איכותית וסידור מהודר בכריכת עור.
+        </p>
+        <div class="flex justify-between items-center pt-2 border-t border-slate-100">
+          <span class="text-2xl font-black gold-text">₪2,290</span>
+          <button type="button" onclick="openTefillinModal(3)" class="bg-amber-500 text-slate-900 font-extrabold px-4 py-2 rounded-xl hover:bg-amber-400 transition text-sm shadow-md">
+            התאמה אישית והזמנה ←
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- המוצר: נרתיקים בעיצוב אישי -->
+    <div class="product-card" data-category="accessories">
+      <div class="relative">
+        <span class="absolute top-3 right-3 bg-emerald-700 text-white font-extrabold text-xs px-3 py-1 rounded-full z-10 shadow">עיצוב אישי</span>
+        <div class="img-container">
+          <img src="images/pouch-custom-rabbi.jpg" alt="נרתיק זמש בעיצוב אישי דמות צדיק" loading="lazy" onerror="imgFallback(this)">
+        </div>
+      </div>
+      <div class="p-6 flex flex-col flex-grow">
+        <h3 class="text-2xl font-bold mb-2 text-slate-900">נרתיקי תפילין בעיצוב אישי</h3>
+        <p class="text-slate-600 text-sm mb-4 leading-relaxed flex-grow">
+          הטבעות והדפסים מיוחדים של דמויות צדיקים, שמות אישיים והקדשות לפי בקשה על גבי נרתיקי זמש וקטיפה איכותיים.
+        </p>
+        <div class="flex justify-between items-center pt-2 border-t border-slate-100">
+          <span class="text-2xl font-black gold-text">החל מ-₪450</span>
+          <a href="#" target="_blank" rel="noopener" data-wa="שלום, אשמח לקבל פרטים על נרתיקים בעיצוב אישי" class="navy-bg text-white font-bold px-4 py-2 rounded-xl hover:opacity-90 transition text-sm">
+            לעיצוב אישי ←
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- המוצר: קלף מזוזה — פותח את חלון המפרט -->
+    <div class="product-card" data-category="mezuzah">
+      <div class="relative">
+        <span class="absolute top-3 right-3 bg-slate-800 text-white font-extrabold text-xs px-3 py-1 rounded-full z-10 shadow">קלף כשר</span>
+        <button type="button" class="img-container" onclick="openMezuzahModal('scroll')" aria-label="פתיחת בחירת גודל ונוסח לקלף מזוזה">
+          <img src="images/scrol-12cm.webp" alt="קלף מזוזה מהודר בגודל 12 ס"מ" loading="lazy" onerror="imgFallback(this)">
+        </button>
+      </div>
+      <div class="p-6 flex flex-col flex-grow">
+        <h3 class="text-2xl font-bold mb-2 text-slate-900">קלף מזוזה מהודר</h3>
+        <p class="text-slate-600 text-sm mb-4 leading-relaxed flex-grow">
+          כתיבה תמה על קלף עבודת יד, בנוסח ספרדי או אשכנזי, בשני גדלים. נבדק לפני המסירה.
+        </p>
+        <div class="flex justify-between items-center pt-2 border-t border-slate-100">
+          <span class="text-2xl font-black gold-text">החל מ-₪250</span>
+          <button type="button" onclick="openMezuzahModal('scroll')" class="navy-bg text-white font-bold px-4 py-2 rounded-xl hover:opacity-90 transition text-sm">
+            בחירת גודל ונוסח ←
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- המוצר: בתי מזוזה — פותח את חלון המפרט -->
+    <div class="product-card" data-category="mezuzah">
+      <div class="relative">
+        <span class="absolute top-3 right-3 bg-slate-600 text-white font-extrabold text-xs px-3 py-1 rounded-full z-10 shadow">קולקציית בתים</span>
+        <button type="button" class="img-container" onclick="openMezuzahModal('case')" aria-label="פתיחת קולקציית בתי מזוזה">
+          <img src="images/case-black.webp" alt="בית מזוזה בטון שחור בעיצוב מודרני" loading="lazy" onerror="imgFallback(this)">
+        </button>
+      </div>
+      <div class="p-6 flex flex-col flex-grow">
+        <h3 class="text-2xl font-bold mb-2 text-slate-900">בתי מזוזה מעוצבים</h3>
+        <p class="text-slate-600 text-sm mb-4 leading-relaxed flex-grow">
+          בתים בעיצוב נקי ועמיד לכל דלת בבית — בטון, עץ ומתכת, בהתאמה לגודל הקלף שבחרתם.
+        </p>
+        <div class="flex justify-between items-center pt-2 border-t border-slate-100">
+          <span class="text-2xl font-black gold-text">החל מ-₪90</span>
+          <button type="button" onclick="openMezuzahModal('case')" class="navy-bg text-white font-bold px-4 py-2 rounded-xl hover:opacity-90 transition text-sm">
+            לצפייה בקולקציה ←
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- חלון מפרט נשלף (Modal) מזוזות -->
+<div id="mezuzahModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-content">
+    <button class="close-btn" onclick="closeMezuzahModal()" aria-label="סגירת החלון">&times;</button>
+    <div id="modalBody">
+      <!-- התוכן והתמונות נטענים כאן דינמית -->
+    </div>
+  </div>
+</div>
+
+<!-- חלון מפרט נשלף (Modal) תפילין -->
+<div id="tefillinModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="tefillinModalTitle">
+  <div class="modal-content">
+    <button class="close-btn" onclick="closeTefillinModal()" aria-label="סגירת החלון">&times;</button>
+    <div id="tefillinModalBody">
+      <!-- התוכן והתמונות נטענים כאן דינמית -->
+    </div>
+  </div>
+</div>
+
+<!-- כפתור WhatsApp צף -->
+<a id="waFloat" href="#" target="_blank" rel="noopener" class="whatsapp-float" title="דבר איתנו בוואטסאפ" aria-label="דבר איתנו בוואטסאפ">💬</a>
+
+<!-- Footer -->
+<footer class="navy-bg text-slate-400 py-8 px-4 text-center text-sm border-t border-slate-800">
+  <p class="font-bold text-slate-300 mb-1">בית היוצר "מלכותא" – תשמישי קדושה וסת"ם</p>
+  <p>© 2026 מלכותא סת"ם – בית יוצר לתפילין ומזוזות מהודרות. כל הזכויות שמורות.</p>
+</footer>
+
+
+<script src="bundle-modal-v5.js"></script>
+
+</body>
+</html>

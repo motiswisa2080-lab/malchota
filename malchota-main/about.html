@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מלכותא - אודות בית היוצר</title>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-navy: #0b132b;
+            --brand-gold: #c59b27;
+            --brand-bg: #f8f6f0;
+            --brand-card-bg: #ffffff;
+            --brand-emerald: #10b981;
+            --text-dark: #1c2541;
+            --text-muted: #475569;
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Assistant', 'Heebo', sans-serif;
+            margin: 0; padding: 0;
+            background-color: var(--brand-bg);
+            color: var(--text-dark);
+            display: flex; flex-direction: column; min-height: 100vh;
+        }
+
+        header {
+            background-color: #ffffff; padding: 16px 24px;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+            position: sticky; top: 0; z-index: 1000;
+            border-bottom: 3px solid var(--brand-gold);
+        }
+        .logo { font-size: 28px; font-weight: 800; color: var(--brand-navy); text-decoration: none; letter-spacing: 1px; }
+        .logo span { color: var(--brand-gold); }
+        nav { display: flex; gap: 10px; }
+        nav a {
+            color: var(--text-muted); text-decoration: none; font-weight: 600; font-size: 15px;
+            padding: 8px 16px; border-radius: 6px; transition: all 0.2s;
+        }
+        nav a:hover, nav a.active { background-color: #f1f5f9; color: var(--brand-navy); font-weight: 700; }
+
+        .page-banner {
+            background-color: var(--brand-navy); color: white;
+            text-align: center; padding: 50px 20px 40px;
+            border-bottom: 2px solid var(--brand-gold);
+        }
+        .page-banner h1 { font-size: 38px; margin: 0 0 10px; font-weight: 800; }
+        .page-banner p { font-size: 18px; color: #cbd5e1; margin: 0; }
+
+        .about-container {
+            max-width: 900px; margin: 40px auto 60px; padding: 0 20px; flex-grow: 1;
+        }
+        .about-card {
+            background-color: var(--brand-card-bg); border-radius: 12px; padding: 40px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04); border: 1px solid #e2e8f0;
+            line-height: 1.8; color: var(--text-dark); font-size: 17px;
+        }
+        .about-card h2 { color: var(--brand-navy); font-size: 26px; margin-top: 0; margin-bottom: 20px; border-bottom: 2px solid var(--brand-gold); padding-bottom: 10px; display: inline-block; }
+        .about-card p { margin-bottom: 20px; color: var(--text-muted); }
+        
+        .values-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-top: 30px;
+        }
+        .value-box {
+            background-color: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; text-align: center;
+        }
+        .value-box h4 { margin: 0 0 8px; color: var(--brand-navy); font-size: 18px; }
+        .value-box p { margin: 0; font-size: 14px; color: var(--text-muted); }
+
+        .whatsapp-float {
+            position: fixed; bottom: 25px; left: 25px;
+            background-color: var(--brand-emerald); color: white;
+            width: 58px; height: 58px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 30px; text-decoration: none;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); z-index: 2000;
+        }
+
+        footer {
+            background-color: var(--brand-navy); color: white; text-align: center;
+            padding: 30px 20px; margin-top: auto; border-top: 3px solid var(--brand-gold);
+        }
+        footer p { margin: 5px 0; color: #94a3b8; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo">מלכות<span>א</span></a>
+        <nav>
+            <a href="index.html">דף הבית</a>
+            <a href="catalog.html">קטלוג</a>
+            <a href="about.html" class="active">אודות</a>
+            <a href="contact.html">צור קשר</a>
+        </nav>
+    </header>
+
+    <section class="page-banner">
+        <h1>אודות בית היוצר "מלכותא"</h1>
+        <p>מיומנות הקולמוס, יראת שמיים ואחריות הלכתית מלאה בכל אות ואות</p>
+    </section>
+
+    <main class="about-container">
+        <div class="about-card">
+            <h2>מלאכת הקודש שלנו</h2>
+            <p>בית היוצר "מלכותא" הוקם מתוך שליחות עמוקה להביא לציבור תשמישי קדושה וסת"ם ברמת ההידור והכשרות הגבוהות ביותר, ללא תיווך וישירות מידו של הסופר.</p>
+            <p>כל מזוזה, זוג תפילין או מגילה הנכתבים אצלנו עוברים תהליך קפדני הכולל בחירה של קלף שליל איכותי, כתיבה בדיו עמיד ומרוכז, והגהה כפולה – הן ידנית על ידי מגיה מומחה ומוסמך והן באמצעות סריקת מחשב חדשנית.</p>
+
+            <div class="values-grid">
+                <div class="value-box">
+                    <h4>✍️ קנייה מהסופר</h4>
+                    <p>קשר ישיר ללא פערי תיווך ויחס אישי בגובה העניים</p>
+                </div>
+                <div class="value-box">
+                    <h4>🔍 הגהה כפולה</h4>
+                    <p>שילוב בדיקת מחשב ממוחשבת והגהת גבר מוסמך</p>
+                </div>
+                <div class="value-box">
+                    <h4>📜 אחריות מלאה</h4>
+                    <p>תעודת כשרות ואחריות לכל ימי חיי המוצר</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <a href="https://wa.me/972500000000" target="_blank" class="whatsapp-float" title="דבר איתנו בוואטסאפ">💬</a>
+
+    <footer>
+        <p><strong>בית היוצר "מלכותא" - תשמישי קדושה וסת"ם</strong></p>
+        <p>כל הזכויות שמורות © 2026</p>
+    </footer>
+
+</body>
+</html>
